@@ -1,0 +1,37 @@
+package ro.marianpavel.revolutassesment.enums
+
+import ro.marianpavel.revolutassesment.R
+
+enum class CurrencyNameFlag(val currency: String, val icon: Int) {
+    AUD("Australian dollar", R.drawable.ic_australia),
+    BGN("Bulgarian lev", R.drawable.ic_australia),
+    BRL("Brazilian real", R.drawable.ic_australia),
+    CAD("Canadian dollar", R.drawable.ic_australia),
+    CHF("Swiss franc", R.drawable.ic_australia),
+    CNY("Chinese yuan", R.drawable.ic_australia),
+    CZK("Czech koruna", R.drawable.ic_australia),
+    DKK("Danish krone", R.drawable.ic_australia),
+    GBP("British pound", R.drawable.ic_australia),
+    HKD("Hong Kong dollar", R.drawable.ic_australia),
+    HRK("Croatian kuna", R.drawable.ic_australia),
+    HUF("Hungarian forint", R.drawable.ic_australia),
+    IDR("Indonesian rupiah", R.drawable.ic_australia),
+    ILS("Israeli new shekel", R.drawable.ic_australia),
+    INR("Indian rupee", R.drawable.ic_australia),
+    ISK("Icelandic króna", R.drawable.ic_australia),
+    JPY("Japanese yen", R.drawable.ic_australia),
+    KRW("South Korean won", R.drawable.ic_australia),
+    MXN("Mexican peso", R.drawable.ic_australia),
+    MYR("Malaysian ringgit", R.drawable.ic_australia),
+    NOK("Norwegian krone", R.drawable.ic_australia),
+    NZD("New Zealand dollar", R.drawable.ic_australia),
+    PHP("Philippine peso", R.drawable.ic_australia),
+    PLN("Polish złoty", R.drawable.ic_australia),
+    RON("Romanian leu", R.drawable.ic_romania),
+    RUB("Russian ruble", R.drawable.ic_australia),
+    SEK("Swedish krona", R.drawable.ic_australia),
+    SGD("Singapore dollar", R.drawable.ic_australia),
+    THB("Thai baht", R.drawable.ic_australia),
+    USD("United States dollar", R.drawable.ic_australia),
+    ZAR("South African rand", R.drawable.ic_australia),
+}
