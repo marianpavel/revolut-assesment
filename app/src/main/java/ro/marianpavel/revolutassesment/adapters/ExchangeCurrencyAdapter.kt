@@ -88,17 +88,6 @@ class ExchangeCurrencyAdapter(private val listener: CurrencyFocusListener, var m
             placeholder(R.drawable.ic_baseline_arrow_circle_down_24)
             transformations(CircleCropTransformation())
         }
-
-        viewHolder.container.setOnClickListener {
-            val newList = mutableListOf<Pair<String, Float>>()
-            newList.addAll(currentList)
-            newList.removeAt(position)
-            newList.add(0, item)
-
-            onCurrentListChanged(currentList, newList)
-            notifyItemMoved(position, 0)
-            notifyItemRangeChanged(0, itemCount)
-        }
     }
 }
 
