@@ -8,5 +8,5 @@ class ExchangeCurrency {
     lateinit var baseCurrency: String
 
     @Json(name = "rates")
-    lateinit var rates: Map<String, Float>
+    var rates: Map<String, Float> = emptyMap()
 }
