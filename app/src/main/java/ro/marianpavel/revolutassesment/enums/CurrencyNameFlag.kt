@@ -4,7 +4,7 @@ import ro.marianpavel.revolutassesment.R
 
 enum class CurrencyNameFlag(val currency: String, val icon: Int) {
     AUD("Australian dollar", R.drawable.ic_australia),
-    BGN("Bulgarian lev", R.drawable.ic_australia),
+    BGN("Bulgarian lev", R.drawable.ic_bulgaria),
     BRL("Brazilian real", R.drawable.ic_australia),
     CAD("Canadian dollar", R.drawable.ic_australia),
     CHF("Swiss franc", R.drawable.ic_australia),
@@ -17,7 +17,7 @@ enum class CurrencyNameFlag(val currency: String, val icon: Int) {
     HUF("Hungarian forint", R.drawable.ic_australia),
     IDR("Indonesian rupiah", R.drawable.ic_australia),
     ILS("Israeli new shekel", R.drawable.ic_australia),
-    INR("Indian rupee", R.drawable.ic_australia),
+    INR("Indian rupee", R.drawable.ic_india),
     ISK("Icelandic króna", R.drawable.ic_australia),
     JPY("Japanese yen", R.drawable.ic_australia),
     KRW("South Korean won", R.drawable.ic_australia),
@@ -28,10 +28,10 @@ enum class CurrencyNameFlag(val currency: String, val icon: Int) {
     PHP("Philippine peso", R.drawable.ic_australia),
     PLN("Polish złoty", R.drawable.ic_australia),
     RON("Romanian leu", R.drawable.ic_romania),
-    RUB("Russian ruble", R.drawable.ic_australia),
+    RUB("Russian ruble", R.drawable.ic_russia),
     SEK("Swedish krona", R.drawable.ic_australia),
     SGD("Singapore dollar", R.drawable.ic_australia),
     THB("Thai baht", R.drawable.ic_australia),
-    USD("United States dollar", R.drawable.ic_australia),
+    USD("United States dollar", R.drawable.ic_usa),
     ZAR("South African rand", R.drawable.ic_australia),
 }
