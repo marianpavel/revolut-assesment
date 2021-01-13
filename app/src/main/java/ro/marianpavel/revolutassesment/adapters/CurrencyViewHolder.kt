@@ -43,9 +43,9 @@ class CurrencyViewHolder(
         }
     }
 
-    fun bind(model: Pair<String, Float>, multiplyFactor: Float) {
-        val rate = model.second
-        val currencyNameFlag = CurrencyNameFlag.valueOf(model.first)
+    fun bind(model: CurrencyViewModel, multiplyFactor: Float) {
+        val currencyNameFlag = CurrencyNameFlag.valueOf(model.currencyCode)
+        val rate = model.rate
 
         code.text = currencyNameFlag.name
         name.text = currencyNameFlag.currency

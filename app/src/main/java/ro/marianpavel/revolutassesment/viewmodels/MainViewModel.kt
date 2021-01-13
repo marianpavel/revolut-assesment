@@ -2,11 +2,9 @@ package ro.marianpavel.revolutassesment.viewmodels
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import kotlinx.coroutines.delay
+import ro.marianpavel.revolutassesment.adapters.CurrencyViewModel
 import ro.marianpavel.revolutassesment.interfaces.RevolutAPI
 import ro.marianpavel.revolutassesment.models.ExchangeCurrency
 
@@ -31,14 +29,15 @@ class MainViewModel @ViewModelInject constructor(
         return newValue / (exchangeCurrency.value?.rates?.get(currency) ?: error("Value is null"))
     }
 
-    fun moveCurrencyToTopIfAny(list: MutableList<Pair<String, Float>>): MutableList<Pair<String, Float>> {
+    fun moveCurrencyToTopIfAny(list: List<Pair<String, Float>>): List<CurrencyViewModel> {
+        val models = list.mapTo(ArrayList(list.size)) { CurrencyViewModel(it.first, it.second) }
         firstCurrency?.let { currency ->
-            val item = list.find {
-                it.first == currency
+            val item = models.find {
+                it.currencyCode == currency
             }
-            list.remove(item)
-            item?.let { list.add(0, it) }
+            models.remove(item)
+            item?.let { models.add(0, it) }
         }
-        return list
+        return models
     }
 }

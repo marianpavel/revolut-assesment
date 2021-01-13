@@ -11,7 +11,7 @@ class ExchangeCurrencyAdapter(
     private val focusListener: CurrencyFocusListener,
     private val onCurrencyChanged: (currency: String, newValue: Float) -> Unit,
     var multiplyFactor: Float
-) : ListAdapter<Pair<String, Float>, CurrencyViewHolder>(ExchangeDiffCallback()) {
+) : ListAdapter<CurrencyViewModel, CurrencyViewHolder>(ExchangeDiffCallback()) {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): CurrencyViewHolder {
         return CurrencyViewHolder(
@@ -28,19 +28,19 @@ class ExchangeCurrencyAdapter(
     }
 }
 
-private class ExchangeDiffCallback : DiffUtil.ItemCallback<Pair<String, Float>>() {
+private class ExchangeDiffCallback : DiffUtil.ItemCallback<CurrencyViewModel>() {
     override fun areItemsTheSame(
-        oldItem: Pair<String, Float>,
-        newItem: Pair<String, Float>
+        oldItem: CurrencyViewModel,
+        newItem: CurrencyViewModel
     ): Boolean {
-        return oldItem.first == newItem.first
+        return oldItem.currencyCode == newItem.currencyCode
     }
 
     override fun areContentsTheSame(
-        oldItem: Pair<String, Float>,
-        newItem: Pair<String, Float>
+        oldItem: CurrencyViewModel,
+        newItem: CurrencyViewModel
     ): Boolean {
-        return oldItem.second == newItem.second
+        return oldItem.rate == newItem.rate
     }
 
 }

@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), CurrencyFocusListener {
 
         mainViewModel.exchangeCurrency.observe(this, {
             if (!it.rates.isNullOrEmpty()) {
-                exchangeAdapter.submitList(mainViewModel.moveCurrencyToTopIfAny(it.rates.toList().toMutableList()))
+                exchangeAdapter.submitList(mainViewModel.moveCurrencyToTopIfAny(it.rates.toList()))
             }
         })
     }
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), CurrencyFocusListener {
         mainViewModel.firstCurrency = currency
         exchangeAdapter.submitList(
             mainViewModel.moveCurrencyToTopIfAny(
-                mainViewModel.exchangeCurrency.value!!.rates.toList().toMutableList()))
+                mainViewModel.exchangeCurrency.value!!.rates.toList()))
     }
 
     private fun onCurrencyChanged(currency: String, newValue: Float) {
