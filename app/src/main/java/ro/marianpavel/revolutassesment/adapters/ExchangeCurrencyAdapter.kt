@@ -5,10 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import ro.marianpavel.revolutassesment.R
-import ro.marianpavel.revolutassesment.interfaces.CurrencyFocusListener
 
 class ExchangeCurrencyAdapter(
-    private val focusListener: CurrencyFocusListener,
+    private val onItemFocused: (String) -> Unit,
     private val onCurrencyChanged: (currency: String, newValue: Float) -> Unit
 ) : ListAdapter<CurrencyViewModel, CurrencyViewHolder>(ExchangeDiffCallback()) {
 
@@ -16,7 +15,7 @@ class ExchangeCurrencyAdapter(
         return CurrencyViewHolder(
             LayoutInflater.from(viewGroup.context)
                 .inflate(R.layout.item_exchange_currency, viewGroup, false),
-            focusListener,
+            onItemFocused,
             onCurrencyChanged
         )
     }

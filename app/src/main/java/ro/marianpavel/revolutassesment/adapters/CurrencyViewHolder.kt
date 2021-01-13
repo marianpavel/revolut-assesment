@@ -11,11 +11,10 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import ro.marianpavel.revolutassesment.R
 import ro.marianpavel.revolutassesment.enums.CurrencyNameFlag
-import ro.marianpavel.revolutassesment.interfaces.CurrencyFocusListener
 
 class CurrencyViewHolder(
     view: View,
-    focusListener: CurrencyFocusListener,
+    onItemFocused: (String) -> Unit,
     onCurrencyChanged: (String, Float) -> Unit
 ) : RecyclerView.ViewHolder(view) {
 
@@ -28,7 +27,7 @@ class CurrencyViewHolder(
     init {
         currencyValue.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                focusListener.onItemFocused(code.text.toString())
+                onItemFocused(code.text.toString())
             }
         }
 
