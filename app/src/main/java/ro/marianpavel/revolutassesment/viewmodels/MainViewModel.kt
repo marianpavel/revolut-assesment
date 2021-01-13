@@ -18,7 +18,7 @@ class MainViewModel @ViewModelInject constructor(
     var isRequestPaused = false
     var firstCurrency: String? = null
 
-    val exchangeCurrencyLiveData: LiveData<ExchangeCurrency> = liveData {
+    val exchangeCurrency: LiveData<ExchangeCurrency> = liveData {
         while(true) {
             if (!isRequestPaused) {
                 emit(client.getExchangeRates())
@@ -28,7 +28,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun calculateMultiplyFactor(currency: String, newValue: Float): Float {
-        return newValue / (exchangeCurrencyLiveData.value?.rates?.get(currency) ?: error("Value is null"))
+        return newValue / (exchangeCurrency.value?.rates?.get(currency) ?: error("Value is null"))
     }
 
     fun moveCurrencyToTopIfAny(list: MutableList<Pair<String, Float>>): MutableList<Pair<String, Float>> {
