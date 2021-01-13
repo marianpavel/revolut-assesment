@@ -30,10 +30,10 @@ class ExchangeCurrencyAdapter(
     ) : RecyclerView.ViewHolder(view) {
 
         val container: ConstraintLayout = view.findViewById(R.id.container)
-        val flag: ImageView = view.findViewById(R.id.currency_flag)
-        val code: TextView = view.findViewById(R.id.currency_code)
-        val name: TextView = view.findViewById(R.id.currency_name)
-        val currencyValue: EditText = view.findViewById(R.id.currency_value)
+        private val flag: ImageView = view.findViewById(R.id.currency_flag)
+        private val code: TextView = view.findViewById(R.id.currency_code)
+        private val name: TextView = view.findViewById(R.id.currency_name)
+        private val currencyValue: EditText = view.findViewById(R.id.currency_value)
 
         init {
             currencyValue.setOnFocusChangeListener { _, hasFocus ->
@@ -52,6 +52,24 @@ class ExchangeCurrencyAdapter(
                 }
             }
         }
+
+        fun bind(model: Pair<String, Float>, multiplyFactor: Float) {
+            val rate = model.second
+            val currencyNameFlag = CurrencyNameFlag.valueOf(model.first)
+
+            code.text = currencyNameFlag.name
+            name.text = currencyNameFlag.currency
+
+            if (!currencyValue.isFocused) {
+                currencyValue.setText((rate * multiplyFactor).toString())
+            }
+
+            flag.load(currencyNameFlag.icon) {
+                crossfade(true)
+                placeholder(R.drawable.ic_baseline_arrow_circle_down_24)
+                transformations(CircleCropTransformation())
+            }
+        }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -64,23 +82,8 @@ class ExchangeCurrencyAdapter(
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-
         val item = getItem(position)
-        val rate = item.second
-        val currencyNameFlag = CurrencyNameFlag.valueOf(item.first)
-
-        viewHolder.code.text = currencyNameFlag.name
-        viewHolder.name.text = currencyNameFlag.currency
-
-        if (!viewHolder.currencyValue.isFocused) {
-            viewHolder.currencyValue.setText((rate * multiplyFactor).toString())
-        }
-
-        viewHolder.flag.load(currencyNameFlag.icon) {
-            crossfade(true)
-            placeholder(R.drawable.ic_baseline_arrow_circle_down_24)
-            transformations(CircleCropTransformation())
-        }
+        viewHolder.bind(item, multiplyFactor)
     }
 }
 
