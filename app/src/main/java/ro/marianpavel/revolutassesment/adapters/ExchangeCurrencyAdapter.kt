@@ -17,10 +17,17 @@ import ro.marianpavel.revolutassesment.R
 import ro.marianpavel.revolutassesment.enums.CurrencyNameFlag
 import ro.marianpavel.revolutassesment.interfaces.CurrencyFocusListener
 
-class ExchangeCurrencyAdapter(private val listener: CurrencyFocusListener, var multiplyFactor: Float) :
-    ListAdapter<Pair<String, Float>, ExchangeCurrencyAdapter.ViewHolder>(ExchangeDiffCallback()) {
+class ExchangeCurrencyAdapter(
+    private val focusListener: CurrencyFocusListener,
+    private val onCurrencyChanged: (currency: String, newValue: Float) -> Unit,
+    var multiplyFactor: Float
+) : ListAdapter<Pair<String, Float>, ExchangeCurrencyAdapter.ViewHolder>(ExchangeDiffCallback()) {
 
-    class ViewHolder(view: View, listener: CurrencyFocusListener) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(
+        view: View,
+        focusListener: CurrencyFocusListener,
+        onCurrencyChanged: (String, Float) -> Unit
+    ) : RecyclerView.ViewHolder(view) {
 
         val container: ConstraintLayout = view.findViewById(R.id.container)
         val flag: ImageView = view.findViewById(R.id.currency_flag)
@@ -31,14 +38,14 @@ class ExchangeCurrencyAdapter(private val listener: CurrencyFocusListener, var m
         init {
             currencyValue.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
-                    listener.onItemFocused(code.text.toString())
+                    focusListener.onItemFocused(code.text.toString())
                 }
             }
 
             currencyValue.doAfterTextChanged { input ->
                 if (currencyValue.isFocused) {
                     if (input?.isNotEmpty() == true) {
-                        listener.onCurrencyChanged(code.text.toString(), input.toString().toFloat())
+                        onCurrencyChanged(code.text.toString(), input.toString().toFloat())
                     } else {
                         currencyValue.setText("0")
                     }
@@ -48,8 +55,12 @@ class ExchangeCurrencyAdapter(private val listener: CurrencyFocusListener, var m
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.item_exchange_currency, viewGroup, false), listener)
+        return ViewHolder(
+            LayoutInflater.from(viewGroup.context)
+                .inflate(R.layout.item_exchange_currency, viewGroup, false),
+            focusListener,
+            onCurrencyChanged
+        )
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {

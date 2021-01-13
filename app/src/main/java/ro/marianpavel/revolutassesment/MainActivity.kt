@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), CurrencyFocusListener {
         setContentView(binding.root)
 
         viewManager = LinearLayoutManager(this)
-        exchangeAdapter = ExchangeCurrencyAdapter(this, 1.0f)
+        exchangeAdapter = ExchangeCurrencyAdapter(this, ::onCurrencyChanged, 1.0f)
 
         binding.currencyExchangeList.apply {
             layoutManager = viewManager
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), CurrencyFocusListener {
                 mainViewModel.exchangeCurrencyLiveData.value!!.rates.toList().toMutableList()))
     }
 
-    override fun onCurrencyChanged(currency: String, newValue: Float) {
+    private fun onCurrencyChanged(currency: String, newValue: Float) {
         exchangeAdapter.multiplyFactor = mainViewModel.calculateMultiplyFactor(currency, newValue)
         exchangeAdapter.notifyItemRangeChanged(1, mainViewModel.exchangeCurrencyLiveData.value!!.rates.size)
     }
