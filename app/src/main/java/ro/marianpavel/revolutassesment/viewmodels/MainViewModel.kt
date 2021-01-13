@@ -33,7 +33,7 @@ class MainViewModel @ViewModelInject constructor(
             }
 
             val models = ec.rates.mapTo(ArrayList(ec.rates.size)) {
-                CurrencyViewModel(it.key, it.value, multiplyFactor!!)
+                CurrencyViewModel(it.key, (it.value * multiplyFactor!!).toString())
             }
 
             firstCurrency?.let { currency ->

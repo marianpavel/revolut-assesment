@@ -1,7 +1,3 @@
 package ro.marianpavel.revolutassesment.adapters
 
-data class CurrencyViewModel(
-    val currencyCode: String,
-    val rate: Float,
-    val multiplyFactor: Float
-)
+data class CurrencyViewModel(val currencyCode: String, val amount: String)

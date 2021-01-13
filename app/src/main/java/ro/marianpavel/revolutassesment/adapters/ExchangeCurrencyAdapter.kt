@@ -39,7 +39,7 @@ private class ExchangeDiffCallback : DiffUtil.ItemCallback<CurrencyViewModel>() 
         oldItem: CurrencyViewModel,
         newItem: CurrencyViewModel
     ): Boolean {
-        return oldItem.rate == newItem.rate
+        return oldItem.amount == newItem.amount
     }
 
 }

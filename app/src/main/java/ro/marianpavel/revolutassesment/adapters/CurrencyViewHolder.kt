@@ -50,7 +50,7 @@ class CurrencyViewHolder(
         name.text = currencyNameFlag.currency
 
         if (!currencyValue.isFocused) {
-            currencyValue.setText((model.rate * model.multiplyFactor).toString())
+            currencyValue.setText(model.amount)
         }
 
         flag.load(currencyNameFlag.icon) {
