@@ -43,15 +43,14 @@ class CurrencyViewHolder(
         }
     }
 
-    fun bind(model: CurrencyViewModel, multiplyFactor: Float) {
+    fun bind(model: CurrencyViewModel) {
         val currencyNameFlag = CurrencyNameFlag.valueOf(model.currencyCode)
-        val rate = model.rate
 
         code.text = currencyNameFlag.name
         name.text = currencyNameFlag.currency
 
         if (!currencyValue.isFocused) {
-            currencyValue.setText((rate * multiplyFactor).toString())
+            currencyValue.setText((model.rate * model.multiplyFactor).toString())
         }
 
         flag.load(currencyNameFlag.icon) {

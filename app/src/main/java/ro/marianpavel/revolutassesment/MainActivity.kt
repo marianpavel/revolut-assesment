@@ -22,29 +22,18 @@ class MainActivity : AppCompatActivity(), CurrencyFocusListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        exchangeAdapter = ExchangeCurrencyAdapter(this, ::onCurrencyChanged, 1.0f)
+        exchangeAdapter = ExchangeCurrencyAdapter(this, ::onCurrencyChanged)
 
         binding.currencyExchangeList.apply {
             adapter = exchangeAdapter
             itemAnimator = null
         }
 
-        mainViewModel.exchangeCurrency.observe(this, {
-            if (!it.rates.isNullOrEmpty()) {
-                exchangeAdapter.submitList(mainViewModel.moveCurrencyToTopIfAny(it.rates.toList()))
-            }
-        })
+        mainViewModel.recyclerModels.observe(this, exchangeAdapter::submitList)
     }
 
-    override fun onItemFocused(currency: String) {
-        mainViewModel.firstCurrency = currency
-        exchangeAdapter.submitList(
-            mainViewModel.moveCurrencyToTopIfAny(
-                mainViewModel.exchangeCurrency.value!!.rates.toList()))
-    }
+    override fun onItemFocused(currency: String) = mainViewModel.onItemFocused(currency)
 
-    private fun onCurrencyChanged(currency: String, newValue: Float) {
-        exchangeAdapter.multiplyFactor = mainViewModel.calculateMultiplyFactor(currency, newValue)
-        exchangeAdapter.notifyItemRangeChanged(1, mainViewModel.exchangeCurrency.value!!.rates.size)
-    }
+    private fun onCurrencyChanged(currency: String, newValue: Float) =
+        mainViewModel.onCurrencyChanged(currency, newValue)
 }

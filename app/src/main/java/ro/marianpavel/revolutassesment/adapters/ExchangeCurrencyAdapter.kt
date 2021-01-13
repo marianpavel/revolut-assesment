@@ -9,8 +9,7 @@ import ro.marianpavel.revolutassesment.interfaces.CurrencyFocusListener
 
 class ExchangeCurrencyAdapter(
     private val focusListener: CurrencyFocusListener,
-    private val onCurrencyChanged: (currency: String, newValue: Float) -> Unit,
-    var multiplyFactor: Float
+    private val onCurrencyChanged: (currency: String, newValue: Float) -> Unit
 ) : ListAdapter<CurrencyViewModel, CurrencyViewHolder>(ExchangeDiffCallback()) {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): CurrencyViewHolder {
@@ -24,7 +23,7 @@ class ExchangeCurrencyAdapter(
 
     override fun onBindViewHolder(viewHolder: CurrencyViewHolder, position: Int) {
         val item = getItem(position)
-        viewHolder.bind(item, multiplyFactor)
+        viewHolder.bind(item)
     }
 }
 

@@ -15,8 +15,12 @@ class MainViewModel @ViewModelInject constructor(
 
     var isRequestPaused = false
     var firstCurrency: String? = null
+    private var multiplyFactor: Float = 1f
 
-    val exchangeCurrency: LiveData<ExchangeCurrency> = liveData {
+    val _recyclerModels = MutableLiveData<List<CurrencyViewModel>>(emptyList())
+    val recyclerModels: LiveData<List<CurrencyViewModel>> get() = _recyclerModels
+
+    private val exchangeCurrency: LiveData<ExchangeCurrency> = liveData {
         while(true) {
             if (!isRequestPaused) {
                 emit(client.getExchangeRates())
@@ -25,12 +29,18 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    fun calculateMultiplyFactor(currency: String, newValue: Float): Float {
+    init {
+        exchangeCurrency.observeForever { ec ->
+            _recyclerModels.value = moveCurrencyToTopIfAny(ec.rates.toList())
+        }
+    }
+
+    private fun calculateMultiplyFactor(currency: String, newValue: Float): Float {
         return newValue / (exchangeCurrency.value?.rates?.get(currency) ?: error("Value is null"))
     }
 
-    fun moveCurrencyToTopIfAny(list: List<Pair<String, Float>>): List<CurrencyViewModel> {
-        val models = list.mapTo(ArrayList(list.size)) { CurrencyViewModel(it.first, it.second) }
+    private fun moveCurrencyToTopIfAny(list: List<Pair<String, Float>>): List<CurrencyViewModel> {
+        val models = list.mapTo(ArrayList(list.size)) { CurrencyViewModel(it.first, it.second, multiplyFactor) }
         firstCurrency?.let { currency ->
             val item = models.find {
                 it.currencyCode == currency
@@ -39,5 +49,15 @@ class MainViewModel @ViewModelInject constructor(
             item?.let { models.add(0, it) }
         }
         return models
+    }
+
+    fun onItemFocused(currency: String) {
+        firstCurrency = currency
+        _recyclerModels.value = moveCurrencyToTopIfAny(exchangeCurrency.value!!.rates.toList())
+    }
+
+    fun onCurrencyChanged(currency: String, newValue: Float) {
+        multiplyFactor = calculateMultiplyFactor(currency, newValue)
+        _recyclerModels.value = moveCurrencyToTopIfAny(exchangeCurrency.value!!.rates.toList())
     }
 }
