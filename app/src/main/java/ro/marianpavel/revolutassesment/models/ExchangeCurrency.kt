@@ -2,11 +2,9 @@ package ro.marianpavel.revolutassesment.models
 
 import com.squareup.moshi.Json
 
-class ExchangeCurrency {
-
+data class ExchangeCurrency(
     @Json(name = "baseCurrency")
-    lateinit var baseCurrency: String
-
+    val baseCurrency: String,
     @Json(name = "rates")
     var rates: Map<String, Float> = emptyMap()
-}
+)
