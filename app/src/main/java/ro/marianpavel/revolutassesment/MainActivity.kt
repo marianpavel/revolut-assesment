@@ -3,8 +3,6 @@ package ro.marianpavel.revolutassesment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import ro.marianpavel.revolutassesment.adapters.ExchangeCurrencyAdapter
 import ro.marianpavel.revolutassesment.databinding.ActivityMainBinding
@@ -17,7 +15,6 @@ class MainActivity : AppCompatActivity(), CurrencyFocusListener {
     private val mainViewModel by viewModels<MainViewModel>()
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var exchangeAdapter: ExchangeCurrencyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,11 +22,9 @@ class MainActivity : AppCompatActivity(), CurrencyFocusListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewManager = LinearLayoutManager(this)
         exchangeAdapter = ExchangeCurrencyAdapter(this, ::onCurrencyChanged, 1.0f)
 
         binding.currencyExchangeList.apply {
-            layoutManager = viewManager
             adapter = exchangeAdapter
             itemAnimator = null
         }
