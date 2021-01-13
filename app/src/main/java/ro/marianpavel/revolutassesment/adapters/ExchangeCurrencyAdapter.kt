@@ -53,7 +53,7 @@ class ExchangeCurrencyAdapter(private val listener: CurrencyFocusListener, var m
 
                 override fun afterTextChanged(s: Editable?) {
                     if (currencyValue.isFocused) {
-                        if (s.toString().isNotEmpty()) {
+                        if (s?.isNotEmpty() == true) {
                             listener.onCurrencyChanged(code.text.toString(), s.toString().toFloat())
                         } else {
                             currencyValue.setText("0")
