@@ -1,7 +1,5 @@
 package ro.marianpavel.revolutassesment.adapters
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +7,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -31,37 +29,21 @@ class ExchangeCurrencyAdapter(private val listener: CurrencyFocusListener, var m
         val currencyValue: EditText = view.findViewById(R.id.currency_value)
 
         init {
-            currencyValue.setOnFocusChangeListener { v, hasFocus ->
+            currencyValue.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     listener.onItemFocused(code.text.toString())
                 }
             }
 
-            currencyValue.addTextChangedListener(object: TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    if (currencyValue.isFocused) {
-                        if (s?.isNotEmpty() == true) {
-                            listener.onCurrencyChanged(code.text.toString(), s.toString().toFloat())
-                        } else {
-                            currencyValue.setText("0")
-                        }
+            currencyValue.doAfterTextChanged { input ->
+                if (currencyValue.isFocused) {
+                    if (input?.isNotEmpty() == true) {
+                        listener.onCurrencyChanged(code.text.toString(), input.toString().toFloat())
+                    } else {
+                        currencyValue.setText("0")
                     }
                 }
-
-            })
+            }
         }
     }
 
