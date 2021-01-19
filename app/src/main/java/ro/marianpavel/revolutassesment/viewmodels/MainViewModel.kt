@@ -2,11 +2,9 @@ package ro.marianpavel.revolutassesment.viewmodels
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import kotlinx.coroutines.delay
+import ro.marianpavel.revolutassesment.adapters.CurrencyViewModel
 import ro.marianpavel.revolutassesment.interfaces.RevolutAPI
 import ro.marianpavel.revolutassesment.models.ExchangeCurrency
 
@@ -16,9 +14,10 @@ class MainViewModel @ViewModelInject constructor(
 ): ViewModel() {
 
     var isRequestPaused = false
-    var firstCurrency: String? = null
-
-    val exchangeCurrencyLiveData: LiveData<ExchangeCurrency> = liveData {
+    private val firstCurrency = MutableLiveData<String?>(null)
+    private val multiplyFactor = MutableLiveData(1f)
+    private val exchangeCurrency: LiveData<ExchangeCurrency?> = liveData {
+        emit(null)
         while(true) {
             if (!isRequestPaused) {
                 emit(client.getExchangeRates())
@@ -27,18 +26,58 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    fun calculateMultiplyFactor(currency: String, newValue: Float): Float {
-        return newValue / (exchangeCurrencyLiveData.value?.rates?.get(currency) ?: error("Value is null"))
+    val recyclerModels: LiveData<List<CurrencyViewModel>> = combineTuple(exchangeCurrency, firstCurrency, multiplyFactor)
+        .map { (ec, firstCurrency, multiplyFactor) ->
+            if (ec == null) {
+                return@map emptyList()
+            }
+
+            val models = ec.rates.mapTo(ArrayList(ec.rates.size)) {
+                CurrencyViewModel(it.key, (it.value * multiplyFactor!!).toString())
+            }
+
+            firstCurrency?.let { currency ->
+                val item = models.find {
+                    it.currencyCode == currency
+                }
+                models.remove(item)
+                item?.let { models.add(0, it) }
+            }
+
+            return@map models
+        }
+
+    fun onItemFocused(currency: String) {
+        firstCurrency.value = currency
     }
 
-    fun moveCurrencyToTopIfAny(list: MutableList<Pair<String, Float>>): MutableList<Pair<String, Float>> {
-        firstCurrency?.let { currency ->
-            val item = list.find {
-                it.first == currency
-            }
-            list.remove(item)
-            item?.let { list.add(0, it) }
-        }
-        return list
+    fun onCurrencyChanged(currency: String, newValue: Float) {
+        multiplyFactor.value = calculateMultiplyFactor(currency, newValue)
+    }
+
+    private fun calculateMultiplyFactor(currency: String, newValue: Float): Float {
+        return newValue / (exchangeCurrency.value?.rates?.get(currency) ?: error("Value is null"))
+    }
+}
+
+/**
+ * Copied from https://github.com/Zhuinden/livedata-combinetuple-kt
+ */
+fun <T1, T2, T3> combineTuple(f1: LiveData<T1>, f2: LiveData<T2>, f3: LiveData<T3>): LiveData<Triple<T1?, T2?, T3?>> = MediatorLiveData<Triple<T1?, T2?, T3?>>().also { mediator ->
+    mediator.value = Triple(f1.value, f2.value, f3.value)
+
+    mediator.addSource(f1) { t1: T1? ->
+        val (_, t2, t3) = mediator.value!!
+        mediator.value = Triple(t1, t2, t3)
+    }
+
+    mediator.addSource(f2) { t2: T2? ->
+        val (t1, _, t3) = mediator.value!!
+        mediator.value = Triple(t1, t2, t3)
+    }
+
+    mediator.addSource(f3) { t3: T3? ->
+        val (t1, t2, _) = mediator.value!!
+        mediator.value = Triple(t1, t2, t3)
     }
 }
