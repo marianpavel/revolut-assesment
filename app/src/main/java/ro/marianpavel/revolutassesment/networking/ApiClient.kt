@@ -6,13 +6,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import ro.marianpavel.revolutassesment.interfaces.RevolutAPI
+import ro.marianpavel.revolutassesment.BuildConfig
+import ro.marianpavel.revolutassesment.interfaces.ExchangeAPI
 
 object ApiClient {
 
-    var BASE_URL: String = "https://hiring.revolut.codes/api/"
-
-    fun apiClient(): RevolutAPI {
+    fun apiClient(): ExchangeAPI {
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -24,11 +23,10 @@ object ApiClient {
         val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.API_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-            .create(RevolutAPI::class.java)
-
+            .create(ExchangeAPI::class.java)
     }
 }

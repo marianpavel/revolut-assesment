@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -18,7 +17,6 @@ class CurrencyViewHolder(
     onCurrencyChanged: (String, Float) -> Unit
 ) : RecyclerView.ViewHolder(view) {
 
-    val container: ConstraintLayout = view.findViewById(R.id.container)
     private val flag: ImageView = view.findViewById(R.id.currency_flag)
     private val code: TextView = view.findViewById(R.id.currency_code)
     private val name: TextView = view.findViewById(R.id.currency_name)

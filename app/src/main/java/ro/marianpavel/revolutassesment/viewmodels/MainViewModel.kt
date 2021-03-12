@@ -1,16 +1,18 @@
 package ro.marianpavel.revolutassesment.viewmodels
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import ro.marianpavel.revolutassesment.adapters.CurrencyViewModel
-import ro.marianpavel.revolutassesment.interfaces.RevolutAPI
+import ro.marianpavel.revolutassesment.di.BaseCurrencyConvertor
+import ro.marianpavel.revolutassesment.interfaces.ExchangeAPI
 import ro.marianpavel.revolutassesment.models.ExchangeCurrency
+import javax.inject.Inject
 
-class MainViewModel @ViewModelInject constructor(
-    private val client: RevolutAPI,
-    @Assisted private val savedStateHandle: SavedStateHandle
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val client: ExchangeAPI,
+    private val baseCurrencyConvertor: BaseCurrencyConvertor
 ): ViewModel() {
 
     var isRequestPaused = false
@@ -56,7 +58,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     private fun calculateMultiplyFactor(currency: String, newValue: Float): Float {
-        return newValue / (exchangeCurrency.value?.rates?.get(currency) ?: error("Value is null"))
+        return exchangeCurrency.value?.let { baseCurrencyConvertor.convertFromBaseCurrency(currency, newValue, it.rates) }!!
     }
 }
 

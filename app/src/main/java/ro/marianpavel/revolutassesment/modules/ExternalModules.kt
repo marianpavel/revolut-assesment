@@ -3,16 +3,18 @@ package ro.marianpavel.revolutassesment.modules
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
-import ro.marianpavel.revolutassesment.interfaces.RevolutAPI
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
+import ro.marianpavel.revolutassesment.interfaces.ExchangeAPI
 import ro.marianpavel.revolutassesment.networking.ApiClient
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(ViewModelComponent::class)
 class ExternalModules {
 
     @Provides
-    fun provideRevolutAPI(): RevolutAPI {
+    @ViewModelScoped
+    fun provideExchangeAPI(): ExchangeAPI {
         return ApiClient.apiClient()
     }
 }
